@@ -56,7 +56,8 @@ app.use((err, req, res, next) => {
 
 // Connect to MongoDB and start server
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(process.env.localhost:27017/mern-blog)
+
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, () => {
@@ -76,3 +77,22 @@ process.on('unhandledRejection', (err) => {
 });
 
 module.exports = app; 
+
+//Server Entry Point
+require('dotenv').config();
+const express = require('express');
+const connectDB = require('./config/db');
+const cors = require('cors');
+const morgan = require('morgan');
+
+const app = express();
+connectDB();
+
+app.use(cors());
+app.use(morgan('dev'));
+app.use(express.json());
+
+app.get('/', (req, res) => res.send('API Running'));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
